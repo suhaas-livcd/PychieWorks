@@ -9,6 +9,7 @@ from pandas import ExcelWriter
 excelFilePathIs = ""
 sheetsFoundAre = []
 sheetData = []
+leave_rows_between_sheet_merging = 2
 
 
 def get_user_input():
@@ -35,17 +36,16 @@ def write_sheet_data_to_excel():
     workbook = ExcelWriter('hello.xlsx')
     # worksheet = workbook.add_worksheet()
     print("Merging Sheets")
-    idxStartIs = 0
-    startIs = 0
-    stopIs = 0
+    __start_col = 0
+    __start_row = 0
     for idx, eachSheetData in enumerate(sheetData):
         print("Writing : ", idx + 1, "/", len(sheetData))
-        idxStartIs = range(len(eachSheetData.index))
-        startIs = startIs + idxStartIs.start
-        stopIs = stopIs + idxStartIs.stop
-        print(idxStartIs.start, " ", idxStartIs.step, " ", idxStartIs.stop)
-        eachSheetData.to_excel(workbook, 'Sheet1', header=None, index=False,
-                               startcol=startIs, startrow=stopIs)
+        sheet_range = range(len(eachSheetData.index))
+        print(sheet_range.start, " ", sheet_range.step, " ", sheet_range.stop)
+        eachSheetData.to_excel(workbook, 'Sheet1', header=True, index=False,
+                               startcol=__start_col, startrow=__start_row)
+        __start_col = __start_col + sheet_range.start
+        __start_row = __start_row + sheet_range.stop + leave_rows_between_sheet_merging
     workbook.close()
 
 
