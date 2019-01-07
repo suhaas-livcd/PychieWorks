@@ -12,6 +12,8 @@ print(monthIs,yearIs)
 print(os.path.isdir("/home/el"))
 print(os.path.exists("/home/el/myfile.txt"))
 print(os.listdir("/home/suhaas/Desktop/MyPrepLogger/diary"))
+print(os.getcwd())
+
 mountPathIs="/home/suhaas/Desktop/MyPrepLogger/diary"
 yearList=os.listdir(mountPathIs)
 if yearIs in yearList:
@@ -19,6 +21,11 @@ if yearIs in yearList:
     monthList=os.listdir(mountPathIs)
     if monthIs in monthList:
         mountPathIs=mountPathIs+"/"+monthIs
-        filesList=os.listdir(mountPathIs)    
+        filesList=os.listdir(mountPathIs)
+        fileNameIs=mountPathIs+"/"+todayIs+".txt"
+        with open(fileNameIs,'w') as f:
+            f.write("python test file it is")
+    else:
+        os.mkdir(monthIs)
 else:
-    print("Not exist")
+    os.mkdir(yearIs)
