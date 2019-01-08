@@ -133,6 +133,11 @@ class Example(QMainWindow):
         textbox_WordOfDayValue = self.textbox_WordOfDay.text()
         QMessageBox.question(self, 'Message - pythonspot.com', "You typed: " + textbox_WordOfDayValue, QMessageBox.Ok, QMessageBox.Ok)
         self.textbox_WordOfDay.setText("")
+        if self.cb_Everest.isChecked():
+            print("Great to go")
+        else:
+            print("Oops")
+        
         
     def center(self):     
         print("__center__ function")
