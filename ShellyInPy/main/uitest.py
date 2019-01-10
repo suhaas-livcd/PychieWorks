@@ -131,13 +131,38 @@ class Example(QMainWindow):
     @pyqtSlot()
     def on_click(self):
         textbox_WordOfDayValue = self.textbox_WordOfDay.text()
-        QMessageBox.question(self, 'Message - pythonspot.com', "You typed: " + textbox_WordOfDayValue, QMessageBox.Ok, QMessageBox.Ok)
-        self.textbox_WordOfDay.setText("")
+        QMessageBox.question(self, 'Message - from Shelly', 
+            "You typed: " + textbox_WordOfDayValue, QMessageBox.Ok, QMessageBox.Ok)
+        self.getData()
+        print(self.my_data)
         if self.cb_Everest.isChecked():
             print("Great to go")
         else:
             print("Oops")
         
+    def getData(self):
+        self.my_data={}
+        
+        #Data from the text boxes
+        self.my_data['textbox_WordOfDay'] = self.textbox_WordOfDay.text()
+        self.my_data['textbox_Diary'] = self.textbox_Diary.toPlainText()
+        
+        #Data from checkbox
+        self.my_data['cb_Ielts']=self.cb_Ielts.isChecked()
+        self.my_data['cb_Guitar']=self.cb_Guitar.isChecked()
+        self.my_data['cb_Charcaol']=self.cb_Charcaol.isChecked()
+        self.my_data['cb_Letterie']=self.cb_Letterie.isChecked()
+        self.my_data['cb_Bariechol']=self.cb_Bariechol.isChecked()
+        self.my_data['cb_Shellie']=self.cb_Shellie.isChecked()
+        self.my_data['cb_Blog']=self.cb_Blog.isChecked()
+        self.my_data['cb_CV']=self.cb_CV.isChecked()
+        self.my_data['cb_DS']=self.cb_DS.isChecked()
+        self.my_data['cb_Edit']=self.cb_Edit.isChecked()
+        self.my_data['cb_Camera']=self.cb_Camera.isChecked()
+        self.my_data['cb_Everest']=self.cb_Everest.isChecked()
+        self.my_data['cb_Run']=self.cb_Run.isChecked()
+        
+        print("Data retrieved from "+len(self.my_data)+ " elements")
         
     def center(self):     
         print("__center__ function")
