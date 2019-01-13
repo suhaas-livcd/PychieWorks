@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QPlainTextEdit, QLabel, QMainWindow, QPushButton, QA
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from ShellyInPy.main.utils import definedUtils
+from ShellyInPy.main.fileMgr import FileManager
 class Example(QMainWindow):
     
     def __init__(self):
@@ -133,13 +134,13 @@ class Example(QMainWindow):
         textbox_WordOfDayValue = self.textbox_WordOfDay.text()
         QMessageBox.question(self, 'Message - from Shelly', 
             "You typed: " + textbox_WordOfDayValue, QMessageBox.Ok, QMessageBox.Ok)
+        
+        #Get data
         self.getData()
         print(self.my_data)
-        if self.cb_Everest.isChecked():
-            print("Great to go")
-        else:
-            print("Oops")
         
+        FileManager().createFile(self.my_data,json=True)
+
     def getData(self):
         self.my_data={}
         
@@ -162,7 +163,7 @@ class Example(QMainWindow):
         self.my_data['cb_Everest']=self.cb_Everest.isChecked()
         self.my_data['cb_Run']=self.cb_Run.isChecked()
         
-        print("Data retrieved from "+len(self.my_data)+ " elements")
+        print("Data retrieved from "+str(len(self.my_data))+ " elements")
         
     def center(self):     
         print("__center__ function")
@@ -180,7 +181,7 @@ class Example(QMainWindow):
         if reply == QMessageBox.Yes:
             event.accept()
         else:
-            event.ignore()         
+            event.ignore()
         
 if __name__ == '__main__':
     print("__main__ function")
