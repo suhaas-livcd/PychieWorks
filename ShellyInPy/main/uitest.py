@@ -1,25 +1,37 @@
 # -*- coding: utf-8 -*-
 import sys
-from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication, QMessageBox, QCheckBox
+from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication, QMessageBox, QCheckBox, QShortcut
 from PyQt5.QtWidgets import QPlainTextEdit, QLabel, QMainWindow, QPushButton, QAction, QLineEdit
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
-from ShellyInPy.main.utils import definedUtils
-from ShellyInPy.main.fileMgr import FileManager
-class Example(QMainWindow):
+from utils import definedUtils
+from fileMgr import FileManager
+from gitMgr import GitManager
+from gitProcess import gitProcess
+
+class Example(QWidget):
     
     def __init__(self):
         super().__init__() 
-        self.title = 'My Shelly in Pie'               
         self.initUI()
-        print("____init____ function")
-        
+        self.shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
+        self.shortcut.activated.connect(self.on_open)
+    
+    @pyqtSlot()
+    def on_open(self):
+        print("Closing!")
+        self.close()
+    
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
+            self.close()
+            
     def initUI(self):  
-        print("__initUI__ function")   
+        print("__initUI__ function")
+        self.title = 'ShellyInPie 1.0'               
         self.setWindowTitle(self.title)                  
         self.resize(500, 500)
         self.center() 
-        self.statusBar().showMessage('Message in statusbar.')
         # Create textbox_WordOfDay
         self.textbox_WordOfDay = QLineEdit(self)
         self.textbox_WordOfDay.move(20, 20)
@@ -131,15 +143,28 @@ class Example(QMainWindow):
             
     @pyqtSlot()
     def on_click(self):
-        textbox_WordOfDayValue = self.textbox_WordOfDay.text()
-        QMessageBox.question(self, 'Message - from Shelly', 
-            "You typed: " + textbox_WordOfDayValue, QMessageBox.Ok, QMessageBox.Ok)
-        
+        textbox_WordOfDay = self.textbox_WordOfDay.text()
+
         #Get data
         self.getData()
         print(self.my_data)
         
-        FileManager().createFile(self.my_data,json=True)
+        #Creating a json file with data inside
+        fileStatus=FileManager().createFile(self.my_data,json=True)
+        
+        #Committing data to git
+        self.git_processThread = gitProcess(dirPath="/home/suhaas/Desktop/MyPrepLogger", commitMsg=textbox_WordOfDay)
+        self.git_processThread.signal.connect(self.finished)
+        self.git_processThread.start()
+
+        QMessageBox.question(self, 'Message - from Shelly', 
+            "\nFile Status: \n" + fileStatus,
+            QMessageBox.Ok, QMessageBox.Ok)
+
+    def finished(self, result):
+        QMessageBox.question(self, 'Message - from Shelly', 
+            "\nGit  Status: \n"+"Finished : "+result,
+            QMessageBox.Ok, QMessageBox.Ok)
 
     def getData(self):
         self.my_data={}
@@ -185,6 +210,10 @@ class Example(QMainWindow):
         
 if __name__ == '__main__':
     print("__main__ function")
-    app = QApplication(sys.argv)
+    print(sys.path)
+    try:
+        App
+    except:
+        App = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    sys.exit(App.exec_())

@@ -8,4 +8,3 @@ class definedUtils:
    def todayDate(self):
 #       %d_%b_%Y_%H:%M:%S
        return datetime.now().strftime('%d %B %Y')
-    

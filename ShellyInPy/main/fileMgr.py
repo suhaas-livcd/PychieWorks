@@ -54,7 +54,7 @@ class FileManager:
         os.makedirs(dirName, exist_ok=True)
 
 #How to use file manager
-fileMgr=FileManager()
+#fileMgr=FileManager()
 #currentFile=fileMgr.createFile()
 #currentFile_1=fileMgr.createFile(data="")
-currentFile_2=fileMgr.createFile(data="{sdfsdf}",json=None)
+#currentFile_2=fileMgr.createFile(data="{sdfsdf}",json=None)
